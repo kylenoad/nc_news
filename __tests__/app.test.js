@@ -83,7 +83,7 @@ describe("GET /api/articles/:article_id", ()=>{
     .get("/api/articles/99999")
     .expect(404)
     .then((response)=>{
-      expect(response.body.error).toBe("Article not found")
+      expect(response.body.error).toBe("Not found")
     })
   })
   test("Should respond with 400 bad request when given a query which is not a number", ()=>{
@@ -132,4 +132,50 @@ describe("GET /api/articles", ()=>{
       expect(body.articles).toBeSorted("created_at", { descending: true })
     })
   })
+})
+describe("GET /api/articles/:article_id/comments", ()=>{
+  test("Should respond with 200 and an object containing the correct properties", () =>{
+    return request(app)
+    .get("/api/articles/1/comments")
+    .expect(200)
+    .then(({body})=>{
+      expect(body.comments.length).toBe(11)
+
+      body.comments.forEach((comment)=>{
+      expect(comment).toMatchObject({
+        comment_id: expect.any(Number),
+        votes: expect.any(Number),
+        created_at: expect.any(String),
+        author: expect.any(String),
+        body: expect.any(String),
+        article_id: expect.any(Number)
+      })
+    })
+  })
+})
+  test("expect 200 and Comments should be served with the most recent comments first", ()=>{
+    return request(app)
+    .get("/api/articles/1/comments")
+    .expect(200)
+    .then(({body})=>{
+      expect(body.comments).toBeSorted("created_at", {descending: true})
+    })
+  })
+  test("Should return 404 with an article id which is out of range", ()=>{
+    return request(app)
+    .get("/api/articles/9999/comments")
+    .expect(404)
+    .then((response)=>{
+      expect(response.body.error).toBe("Not found")
+  })
+})
+  test("Should give a 400 when given an article id which is not a number", ()=>{
+    return request(app)
+    .get("/api/articles/abc/comments")
+    .expect(400)
+    .then((response)=>{
+      expect(response.body.error).toBe("Bad request")
+    })
+  })
+
 })

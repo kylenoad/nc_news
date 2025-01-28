@@ -5,6 +5,7 @@ const app = express()
 const { getApiEndpoints } = require("./controllers/endPointcontrollers")
 const { getTopics } = require("./controllers/topicsControllers")
 const { getArticleById, getArticles } = require("./controllers/articlesControllers")
+const { getCommentsByArticleId } = require("./controllers/commentsControllers")
 
 
 app.get("/api", getApiEndpoints)
@@ -15,6 +16,8 @@ app.get("/api/articles/:article_id", getArticleById)
 
 app.get("/api/articles", getArticles)
 
+app.get("/api/articles/:article_id/comments", getCommentsByArticleId)
+
 
 //error handling middleware
 
@@ -24,8 +27,8 @@ app.all("*", (req, res)=>{
 })
 //404 ERRORS - custom error - number is valid, but it is out of range
 app.use((err, req, res, next)=>{
-    if(err.msg === "Article not found"){
-        res.status(404).send({error: "Article not found"})
+    if(err.msg === "Article not found" || err.msg === "Comment not found"){
+        res.status(404).send({error: "Not found"})
     }
     else{
         next(err)
@@ -39,7 +42,6 @@ app.use((err, req, res, next)=>{
         res.status(400).send({error: "Bad request"})
     }
 })
-
 
 //500 ERRORS
 app.use((err, req, res, next)=>{
