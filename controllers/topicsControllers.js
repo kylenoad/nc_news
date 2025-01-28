@@ -11,4 +11,6 @@ const getTopics = (request, response, next) =>{
 }
 
 
+
+
 module.exports = { getTopics }
