@@ -367,3 +367,9 @@ describe("DELETE /api/comments/:comment_id", ()=>{
     })
   })
 })
+
+describe("GET /api/users",()=>{
+  test("Should respond with 200 and an array of all users with the correct properties",()=>{
+
+  })
+})
