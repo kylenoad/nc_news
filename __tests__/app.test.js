@@ -341,3 +341,29 @@ describe("PATCH /api/articles/:article_id", ()=>{
   })
 })
 
+describe("DELETE /api/comments/:comment_id", ()=>{
+  test("Should respond with a 204 and no content", ()=>{
+    return request(app)
+    .delete("/api/comments/1")
+    .expect(204)
+    .then((response)=>{
+      expect(response.body).toEqual({})
+    })
+  })
+  test("Should return 404 if comment id is valid but does not exist", ()=>{
+    return request(app)
+    .delete("/api/comments/9999")
+    .expect(404)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("Comment not found")
+    })
+  })
+  test("Should return 400 if the comment_id is not valid", ()=>{
+    return request(app)
+    .delete("/api/comments/one")
+    .expect(400)
+    .then((response)=>{
+      expect(response.body.msg).toBe("Bad request")
+    })
+  })
+})
