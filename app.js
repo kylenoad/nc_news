@@ -1,12 +1,12 @@
 const express = require("express")
-const app = express()
-
 
 const { getApiEndpoints } = require("./controllers/endPointcontrollers")
 const { getTopics } = require("./controllers/topicsControllers")
 const { getArticleById, getArticles } = require("./controllers/articlesControllers")
-const { getCommentsByArticleId } = require("./controllers/commentsControllers")
+const { getCommentsByArticleId, postComment } = require("./controllers/commentsControllers")
 
+const app = express()
+app.use(express.json())
 
 app.get("/api", getApiEndpoints)
 
@@ -18,6 +18,8 @@ app.get("/api/articles", getArticles)
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId)
 
+app.post("/api/articles/:article_id/comments", postComment)
+
 
 //error handling middleware
 
@@ -25,21 +27,25 @@ app.get("/api/articles/:article_id/comments", getCommentsByArticleId)
 app.all("*", (req, res)=>{
     res.status(404).send( { error: "invalid API endpoint" })
 })
-//404 ERRORS - custom error - number is valid, but it is out of range
-app.use((err, req, res, next)=>{
-    if(err.msg === "Article not found" || err.msg === "Comment not found"){
-        res.status(404).send({error: "Not found"})
+
+//404 ERRORS
+app.use((err, req, res, next) => {
+    if (err.status && err.msg) {
+      res.status(err.status).send({ msg: err.msg })
+    } else {
+      next(err)
     }
-    else{
-        next(err)
-    }
-})
+  })
+
 
 //400 ERRORS
 app.use((err, req, res, next)=>{
     //console.log(err)
-    if(err.code === "22P02"){
-        res.status(400).send({error: "Bad request"})
+    if(err.code === "22P02" ){
+        res.status(400).send({msg: "Bad request"})
+    }
+    else{
+    next(err)
     }
 })
 
