@@ -235,6 +235,7 @@ describe("POST /api/articles/:article_id/comments", ()=>{
       expect(response.body.msg).toBe("Article not found")
     })
   })
+  //==================FIX THIS TEST======================
   // test("should respond with 400 when posted object is missing keys", ()=>{
   //   const newComment = {
   //     body: "This is a test"
@@ -255,6 +256,84 @@ describe("POST /api/articles/:article_id/comments", ()=>{
     return request(app)
     .post("/api/articles/1/comments")
     .send(newComment)
+    .expect(400)
+    .then((response)=>{
+      expect(response.body.msg).toBe("Bad request")
+    })
+  })
+})
+
+describe("PATCH /api/articles/:article_id", ()=>{
+  test("Should respond with 200 and the updated article with amended votes when given a positive number", ()=>{
+    return request(app)
+    .patch("/api/articles/1")
+    .send({ inc_votes : 1 })
+    .expect(200)
+    .then(({body})=>{
+      const article = body.article
+      expect(article).toMatchObject({
+        article_id: 1,
+        title: "Living in the shadow of a great man",
+        topic: "mitch",
+        author: "butter_bridge",
+        body: "I find this existence challenging",
+        created_at: expect.any(String),
+        votes: 101,
+        article_img_url:
+      "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      })
+    })
+  })
+  test("Should update the votes when given a  negative number", ()=>{
+    return request(app)
+    .patch("/api/articles/1")
+    .send({ inc_votes : -1 })
+    .expect(200)
+    .then(({body})=>{
+      const article = body.article
+      expect(article).toMatchObject({
+        article_id: 1,
+        title: "Living in the shadow of a great man",
+        topic: "mitch",
+        author: "butter_bridge",
+        body: "I find this existence challenging",
+        created_at: expect.any(String),
+        votes: 99,
+        article_img_url:
+      "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      })
+    })
+  })
+  test("Should give a 404 when given article which doesnt exist", ()=>{
+    return request(app)
+    .patch("/api/articles/9999")
+    .expect(404)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("Article not found")
+    })
+  })
+  test("Should give a 400 when given article_id which isnt a number", ()=>{
+    return request(app)
+    .patch("/api/articles/abc")
+    .send({ inc_votes : 1 })
+    .expect(400)
+    .then((response)=>{
+      expect(response.body.msg).toBe("Bad request")
+    })
+  })
+  test("Should respond with 400 when no votes are sent", ()=>{
+    return request(app)
+    .patch("/api/articles/1")
+    .send({})
+    .expect(400)
+    .then((response)=>{
+      expect(response.body.msg).toBe("Bad request")
+    })
+  })
+  test("Should respond with 400 when inc_votes is not a valid type", ()=>{
+    return request(app)
+    .patch("/api/articles/1")
+    .send({ inc_votes : "one" })
     .expect(400)
     .then((response)=>{
       expect(response.body.msg).toBe("Bad request")

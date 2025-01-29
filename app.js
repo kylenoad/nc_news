@@ -2,7 +2,7 @@ const express = require("express")
 
 const { getApiEndpoints } = require("./controllers/endPointcontrollers")
 const { getTopics } = require("./controllers/topicsControllers")
-const { getArticleById, getArticles } = require("./controllers/articlesControllers")
+const { getArticleById, getArticles, patchArticleById } = require("./controllers/articlesControllers")
 const { getCommentsByArticleId, postComment } = require("./controllers/commentsControllers")
 
 const app = express()
@@ -19,6 +19,8 @@ app.get("/api/articles", getArticles)
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId)
 
 app.post("/api/articles/:article_id/comments", postComment)
+
+app.patch("/api/articles/:article_id", patchArticleById)
 
 
 //error handling middleware
@@ -41,7 +43,7 @@ app.use((err, req, res, next) => {
 //400 ERRORS
 app.use((err, req, res, next)=>{
     //console.log(err)
-    if(err.code === "22P02" ){
+    if(err.code === "22P02" || err.code === "23502"){
         res.status(400).send({msg: "Bad request"})
     }
     else{
