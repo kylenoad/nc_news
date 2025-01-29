@@ -82,8 +82,8 @@ describe("GET /api/articles/:article_id", ()=>{
     return request(app)
     .get("/api/articles/99999")
     .expect(404)
-    .then((response)=>{
-      expect(response.body.error).toBe("Not found")
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("Article not found")
     })
   })
   test("Should respond with 400 bad request when given a query which is not a number", ()=>{
@@ -91,7 +91,7 @@ describe("GET /api/articles/:article_id", ()=>{
     .get("/api/articles/a")
     .expect(400)
     .then((response)=>{
-      expect(response.body.error).toBe("Bad request")
+      expect(response.body.msg).toBe("Bad request")
     })
   })
 })
@@ -148,7 +148,7 @@ describe("GET /api/articles/:article_id/comments", ()=>{
         created_at: expect.any(String),
         author: expect.any(String),
         body: expect.any(String),
-        article_id: expect.any(Number)
+        article_id: 1
       })
     })
   })
@@ -165,8 +165,8 @@ describe("GET /api/articles/:article_id/comments", ()=>{
     return request(app)
     .get("/api/articles/9999/comments")
     .expect(404)
-    .then((response)=>{
-      expect(response.body.error).toBe("Not found")
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("Article not found");
   })
 })
   test("Should give a 400 when given an article id which is not a number", ()=>{
@@ -174,8 +174,91 @@ describe("GET /api/articles/:article_id/comments", ()=>{
     .get("/api/articles/abc/comments")
     .expect(400)
     .then((response)=>{
-      expect(response.body.error).toBe("Bad request")
+      expect(response.body.msg).toBe("Bad request")
+    })
+  })
+  test("Should return an empty array if the article exists but has no comments", ()=>{
+    return request(app)
+    .get("/api/articles/13/comments")
+    .expect(200)
+    .then((response)=>{
+      expect(response.body.comments).toEqual([])
+    })
+  })
+})
+
+describe("POST /api/articles/:article_id/comments", ()=>{
+  test("Should respond with 201 status and and object containing the posted comment", ()=>{
+    const newComment = {
+      username: 'butter_bridge',
+      body: "This is a test"
+    }
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send(newComment)
+    .expect(201)
+    .then(({ body })=>{
+      expect(body.comment).toMatchObject({
+        comment_id: expect.any(Number),
+        body: "This is a test",
+        article_id: 1,
+        author: 'butter_bridge',
+        votes: 0,
+        created_at: expect.any(String)
+      })
     })
   })
 
+  test("Should respond with 400 when article_id is not valid", ()=>{
+    const newComment = {
+      username: 'butter_bridge',
+      body: "This is a test"
+    }
+    return request(app)
+    .post("/api/articles/abc/comments")
+    .send(newComment)
+    .expect(400)
+    .then((response)=>{
+      expect(response.body.msg).toBe("Bad request")
+    })
+  })
+  test("Should respond with 404 when article id is valid but is out of range", ()=>{
+    const newComment = {
+      username: 'butter_bridge',
+      body: "This is a test"
+    }
+    return request(app)
+    .post("/api/articles/9999/comments")
+    .send(newComment)
+    .expect(404)
+    .then((response)=>{
+      expect(response.body.msg).toBe("Article not found")
+    })
+  })
+  // test("should respond with 400 when posted object is missing keys", ()=>{
+  //   const newComment = {
+  //     body: "This is a test"
+  //   }
+  //   return request(app)
+  //   .post("/api/articles/1/comments")
+  //   .send(newComment)
+  //   .expect(400)
+  //   .then((response)=>{
+  //     expect(response.body.error).toBe("Bad request")
+  //   })
+  // })
+  test("should respond with 400 when posted object values are the wrong type", ()=>{
+    const newComment = {
+      username: 1,
+      body: 1
+    }
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send(newComment)
+    .expect(400)
+    .then((response)=>{
+      expect(response.body.msg).toBe("Bad request")
+    })
+  })
 })
+
