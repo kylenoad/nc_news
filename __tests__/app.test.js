@@ -441,3 +441,17 @@ describe("GET /api/articles (sorting queries)", ()=>{
     })
   })
 })
+
+describe("GET /api/articles (topic query)", ()=>{
+  test("Should respond with 200 and and return articles filterd by topic", ()=>{
+    return request(app)
+    .get("/api/articles?topic=mitch")
+    .expect(200)
+    .then(({body})=>{
+      const articles = body.articles
+      articles.forEach((article)=>{
+        expect(article.topic).toBe("mitch")
+      })
+    })
+  })
+})
