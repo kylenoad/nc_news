@@ -2,11 +2,25 @@ const db = require("../db/connection")
 
 const fetcharticlesById = (article_id) =>{
     return db
-    .query("SELECT * FROM articles WHERE article_id=$1",
+    .query(`
+        SELECT
+          articles.author, 
+          articles.title, 
+          articles.article_id, 
+          articles.body,
+          articles.topic, 
+          articles.created_at, 
+          articles.votes, 
+          articles.article_img_url, 
+          COUNT(comments.comment_id) :: INT AS comment_count
+        FROM articles
+        LEFT JOIN comments ON comments.article_id = articles.article_id
+        WHERE articles.article_id = $1
+        GROUP BY articles.article_id;`,
         [article_id]
-    )
+        )
     .then(({rows})=>{
-        if(rows.length === 0){
+        if(rows.length === 0){ //=============>make this a reusable function when refactoring<==================
             return Promise.reject({ status: 404, msg: "Article not found" })
         }
         else{
@@ -39,6 +53,7 @@ const fetchArticles = (sort_by = "created_at", order = "DESC", topic) => {
           articles.author, 
           articles.title, 
           articles.article_id, 
+          articles.body,
           articles.topic, 
           articles.created_at, 
           articles.votes, 
@@ -91,3 +106,4 @@ const updateVotes = (article_id, newVotes) =>{
 }
 
 module.exports = { fetcharticlesById, fetchArticles, updateVotes}
+

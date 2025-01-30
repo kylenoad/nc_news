@@ -113,6 +113,7 @@ describe("GET /api/articles", ()=>{
           author: expect.any(String),
           title: expect.any(String),
           article_id: expect.any(Number),
+          body: expect.any(String),
           topic: expect.any(String),
           created_at: expect.any(String),
           votes: expect.any(Number),
@@ -233,19 +234,18 @@ describe("POST /api/articles/:article_id/comments", ()=>{
       expect(response.body.msg).toBe("Article not found")
     })
   })
-  //==================FIX THIS TEST======================
-  // test("should respond with 400 when posted object is missing keys", ()=>{
-  //   const newComment = {
-  //     body: "This is a test"
-  //   }
-  //   return request(app)
-  //   .post("/api/articles/1/comments")
-  //   .send(newComment)
-  //   .expect(400)
-  //   .then((response)=>{
-  //     expect(response.body.error).toBe("Bad request")
-  //   })
-  // })
+  test("should respond with 400 when posted object is missing keys", ()=>{
+    const newComment = {
+      body: "This is a test"
+    }
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send(newComment)
+    .expect(400)
+    .then((response)=>{
+      expect(response.body.msg).toBe("Bad request")
+    })
+  })
   test("should respond with 400 when posted object values are the wrong type", ()=>{
     const newComment = {
       username: 1,
@@ -460,6 +460,28 @@ describe("GET /api/articles (topic query)", ()=>{
     .expect(404)
       .then(({body}) => {
         expect(body.msg).toBe("Article not found")
+    })
+  })
+})
+
+describe("GET /api/articles/:article_id (comment_count)", ()=>{
+  test("Should return with a 200 and an article object that includes comment count", ()=>{
+    return request(app)
+    .get("/api/articles/1")
+    .expect(200)
+    .then(({body})=>{
+      const article = body.article
+      expect(article).toMatchObject({
+        author: expect.any(String),
+        title: expect.any(String),
+        article_id: expect.any(Number),
+        body: expect.any(String),
+        topic: expect.any(String),
+        created_at: expect.any(String),
+        votes: expect.any(Number),
+        article_img_url: expect.any(String),
+        comment_count: 11
+      })
     })
   })
 })
