@@ -441,3 +441,25 @@ describe("GET /api/articles (sorting queries)", ()=>{
     })
   })
 })
+
+describe("GET /api/articles (topic query)", ()=>{
+  test("Should respond with 200 and and return articles filterd by topic", ()=>{
+    return request(app)
+    .get("/api/articles?topic=mitch")
+    .expect(200)
+    .then(({body})=>{
+      const articles = body.articles
+      articles.forEach((article)=>{
+        expect(article.topic).toBe("mitch")
+      })
+    })
+  })
+  test("Should return a 404 if given a topic that doesnt exist", ()=>{
+    return request(app)
+    .get("/api/articles?topic=cheese")
+    .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe("Article not found")
+    })
+  })
+})
