@@ -75,9 +75,7 @@ describe("GET /api/articles/:article_id", ()=>{
       })
     })
   })
-  //errors to test
-  // - not a number - bad request 400
-  // - valid id but not matching article in db
+
   test("Should respond with 404 when given article id that is correct but the article doesnt exist", ()=>{
     return request(app)
     .get("/api/articles/99999")
@@ -384,6 +382,62 @@ describe("GET /api/users",()=>{
           avatar_url: expect.any(String)
         })
       })
+    })
+  })
+})
+
+describe("GET /api/articles (sorting queries)", ()=>{
+  test("Should respond with 200 and an array of articles sorted by created_at date decending by default", ()=>{
+    return request(app)
+    .get("/api/articles")
+    .expect(200)
+    .then(({body})=>{
+      const articles = body.articles
+      expect(Array.isArray(articles)).toBe(true)
+      expect(articles).toBeSorted({ key: "created_at", descending: true })
+    })
+  })
+  test("Should sort_by selected column in default order of decending", ()=>{
+    return request(app)
+    .get("/api/articles?sort_by=votes")
+    .expect(200)
+    .then(({body})=>{
+      const articles = body.articles
+      expect(articles).toBeSorted(({ key: "votes", descending: true }))
+    })
+  })
+  test("Should sort_by selected column by asending", ()=>{
+    return request(app)
+    .get("/api/articles?sort_by=votes&order=asc")
+    .expect(200)
+    .then(({body})=>{
+      const articles = body.articles
+      expect(articles).toBeSorted(({ key: "votes", ascending: true }))
+    })
+  })
+  test("Should sort_by selected column by decending", ()=>{
+    return request(app)
+    .get("/api/articles?sort_by=votes&order=desc")
+    .expect(200)
+    .then(({body})=>{
+      const articles = body.articles
+      expect(articles).toBeSorted(({ key: "votes", descending: true }))
+    })
+  })
+  test("Should return a 400 error for invalid sort_by column", ()=>{
+    return request(app)
+    .get("/api/articles?sort_by=invalid_column")
+    .expect(400)
+    .then(({body})=>{
+      expect(body.msg).toBe("Bad request")
+    })
+  })
+  test("Should return a 400 error for invalid order", ()=>{
+    return request(app)
+    .get("/api/articles?sort_by=votes&order=lowtohigh")
+    .expect(400)
+    .then(({body})=>{
+      expect(body.msg).toBe("Bad request")
     })
   })
 })

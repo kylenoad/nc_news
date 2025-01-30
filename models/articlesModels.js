@@ -15,7 +15,25 @@ const fetcharticlesById = (article_id) =>{
     })
 }
 
-const fetchArticles = () => {
+const fetchArticles = (sort_by = "created_at", order = "DESC") => {
+
+    const validSortbyQueries = ["article_id", "title", "topic", "author", "created_at", "votes"]
+    const validOrders = ["ASC", "DESC"]
+
+    if (sort_by && !validSortbyQueries.includes(sort_by)) {
+        return Promise.reject({
+          status: 400,
+          msg: "Bad request"
+        })
+      }
+
+     if (order && !validOrders.includes(order.toUpperCase())) {
+        return Promise.reject({
+            status: 400,
+            msg: "Bad request"
+        })
+    }
+
     return db
     .query(`
         SELECT 
@@ -30,7 +48,7 @@ const fetchArticles = () => {
         FROM articles
         LEFT JOIN comments ON comments.article_id = articles.article_id
         GROUP BY articles.article_id
-        ORDER BY articles.created_at DESC
+        ORDER BY ${sort_by} ${order}
       `)
     .then((result) => {
         return result.rows
