@@ -15,7 +15,7 @@ const fetcharticlesById = (article_id) =>{
     })
 }
 
-const fetchArticles = (sort_by = "created_at", order = "DESC") => {
+const fetchArticles = (sort_by = "created_at", order = "DESC", topic) => {
 
     const validSortbyQueries = ["article_id", "title", "topic", "author", "created_at", "votes"]
     const validOrders = ["ASC", "DESC"]
@@ -34,8 +34,7 @@ const fetchArticles = (sort_by = "created_at", order = "DESC") => {
         })
     }
 
-    return db
-    .query(`
+    let sqlQuery = `
         SELECT 
           articles.author, 
           articles.title, 
@@ -47,13 +46,22 @@ const fetchArticles = (sort_by = "created_at", order = "DESC") => {
           COUNT(comments.comment_id) :: INT AS comment_count
         FROM articles
         LEFT JOIN comments ON comments.article_id = articles.article_id
-        GROUP BY articles.article_id
-        ORDER BY ${sort_by} ${order}
-      `)
-    .then((result) => {
-        return result.rows
-    })
+      `
+      let queryParams = []
+      
+      if(topic){
+        sqlQuery += ` WHERE articles.topic = $1`
+        queryParams.push(topic)
+      }
+        sqlQuery += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order};`
+    
+    return db
+        .query(sqlQuery, queryParams)
+        .then((result) => {
+            return result.rows
+        })
 }
+
 
 const updateVotes = (article_id, newVotes) =>{
     return db.query(
