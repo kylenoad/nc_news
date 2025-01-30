@@ -387,13 +387,57 @@ describe("GET /api/users",()=>{
 })
 
 describe("GET /api/articles (sorting queries)", ()=>{
-  test("Should respond with 200 and an array of articles sorted by created_at date most recent first by default", ()=>{
+  test("Should respond with 200 and an array of articles sorted by created_at date decending by default", ()=>{
     return request(app)
     .get("/api/articles")
     .expect(200)
     .then(({body})=>{
       const articles = body.articles
-      expect(articles).toBeSorted("created_at", { descending: true })
+      expect(Array.isArray(articles)).toBe(true)
+      expect(articles).toBeSorted({ key: "created_at", descending: true })
+    })
+  })
+  test("Should sort_by selected column in default order of decending", ()=>{
+    return request(app)
+    .get("/api/articles?sort_by=votes")
+    .expect(200)
+    .then(({body})=>{
+      const articles = body.articles
+      expect(articles).toBeSorted(({ key: "votes", descending: true }))
+    })
+  })
+  test("Should sort_by selected column by asending", ()=>{
+    return request(app)
+    .get("/api/articles?sort_by=votes&order=asc")
+    .expect(200)
+    .then(({body})=>{
+      const articles = body.articles
+      expect(articles).toBeSorted(({ key: "votes", ascending: true }))
+    })
+  })
+  test("Should sort_by selected column by decending", ()=>{
+    return request(app)
+    .get("/api/articles?sort_by=votes&order=desc")
+    .expect(200)
+    .then(({body})=>{
+      const articles = body.articles
+      expect(articles).toBeSorted(({ key: "votes", descending: true }))
+    })
+  })
+  test("Should return a 400 error for invalid sort_by column", ()=>{
+    return request(app)
+    .get("/api/articles?sort_by=invalid_column")
+    .expect(400)
+    .then(({body})=>{
+      expect(body.msg).toBe("Bad request")
+    })
+  })
+  test("Should return a 400 error for invalid order", ()=>{
+    return request(app)
+    .get("/api/articles?sort_by=votes&order=lowtohigh")
+    .expect(400)
+    .then(({body})=>{
+      expect(body.msg).toBe("Bad request")
     })
   })
 })
