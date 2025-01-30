@@ -454,5 +454,12 @@ describe("GET /api/articles (topic query)", ()=>{
       })
     })
   })
-  // test()
+  test("Should return a 404 if given a topic that doesnt exist", ()=>{
+    return request(app)
+    .get("/api/articles?topic=cheese")
+    .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe("Article not found")
+    })
+  })
 })

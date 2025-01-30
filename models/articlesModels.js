@@ -58,6 +58,12 @@ const fetchArticles = (sort_by = "created_at", order = "DESC", topic) => {
     return db
         .query(sqlQuery, queryParams)
         .then((result) => {
+            if(result.rows.length === 0){ //=============>make this a reusable function when refactoring<==================
+                return Promise.reject({
+                    status: 404,
+                    msg: "Article not found"
+                })
+            }
             return result.rows
         })
 }
