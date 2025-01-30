@@ -20,7 +20,7 @@ const fetchCommentsByArticleID = (article_id) => {
 
 const insertComment = (username, body, article_id) => {
 
-    if (typeof username !== "string" || typeof body !== "string") {
+    if (!username || !body || typeof username !== "string" || typeof body !== "string" ) {
         return Promise.reject({ status: 400, msg: "Bad request" })
     }
 

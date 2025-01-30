@@ -234,19 +234,18 @@ describe("POST /api/articles/:article_id/comments", ()=>{
       expect(response.body.msg).toBe("Article not found")
     })
   })
-  //==================FIX THIS TEST======================
-  // test("should respond with 400 when posted object is missing keys", ()=>{
-  //   const newComment = {
-  //     body: "This is a test"
-  //   }
-  //   return request(app)
-  //   .post("/api/articles/1/comments")
-  //   .send(newComment)
-  //   .expect(400)
-  //   .then((response)=>{
-  //     expect(response.body.error).toBe("Bad request")
-  //   })
-  // })
+  test("should respond with 400 when posted object is missing keys", ()=>{
+    const newComment = {
+      body: "This is a test"
+    }
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send(newComment)
+    .expect(400)
+    .then((response)=>{
+      expect(response.body.msg).toBe("Bad request")
+    })
+  })
   test("should respond with 400 when posted object values are the wrong type", ()=>{
     const newComment = {
       username: 1,
