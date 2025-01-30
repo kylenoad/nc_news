@@ -75,9 +75,7 @@ describe("GET /api/articles/:article_id", ()=>{
       })
     })
   })
-  //errors to test
-  // - not a number - bad request 400
-  // - valid id but not matching article in db
+
   test("Should respond with 404 when given article id that is correct but the article doesnt exist", ()=>{
     return request(app)
     .get("/api/articles/99999")
@@ -384,6 +382,18 @@ describe("GET /api/users",()=>{
           avatar_url: expect.any(String)
         })
       })
+    })
+  })
+})
+
+describe("GET /api/articles (sorting queries)", ()=>{
+  test("Should respond with 200 and an array of articles sorted by created_at date most recent first by default", ()=>{
+    return request(app)
+    .get("/api/articles")
+    .expect(200)
+    .then(({body})=>{
+      const articles = body.articles
+      expect(articles).toBeSorted("created_at", { descending: true })
     })
   })
 })
