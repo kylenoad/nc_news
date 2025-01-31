@@ -25,5 +25,89 @@
         }
       ]
     }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "Serves a single article on given article Id",
+    "queries": [],
+    "example response": {
+      "article":{
+          "article_id": 1,
+          "title": "Living in the shadow of a great man",
+          "topic": "mitch",
+          "author": "butter_bridge",
+          "body": "I find this existence challenging",
+          "created_at": 1594329060000,
+          "votes": 100,
+          "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+          "comment_count": 11
+        }
+    }
+  },
+  "GET /api/articles/:article_id/comments":{
+    "description": "Serves an array of comments on given article Id",
+    "queries": [],
+    "example response":{
+      "comments":[
+        {
+        "comment_id": 15,
+        "body": "I am 100% sure that we're not completely sure.",
+        "votes": 1,
+        "author": "butter_bridge",
+        "article_id": 5,
+        "created_at": 1606176480000
+        }
+      ]
+    }
+  },
+  "POST /api/articles/:article_id/comments":{
+    "description": "Serves the posted comment on article Id",
+    "queries": [],
+    "example response":{
+      "comment":{
+        "comment_id": 20,
+        "body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+        "votes": 16,
+        "author": "butter_bridge",
+        "article_id": 9,
+        "created_at": 1586179020000
+      }
+    }
+  },
+  "PATCH /api/articles/:article_id":{
+    "description": "Serves the updated object on given article Id and vote_increment value",
+    "queries": [],
+    "example response":{
+      "article":{
+        "article_id": 1,
+        "title": "Living in the shadow of a great man",
+        "topic": "mitch",
+        "author": "butter_bridge",
+        "body": "I find this existence challenging",
+        "created_at": 43534543657,
+        "votes": 101,
+        "article_img_url":
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+      }
+    }
+  },
+  "DELETE /api/comments/:comment_id":{
+    "description": "Deletes comment based on comment_id",
+    "queries": [],
+    "example response":{}
+    },
+
+  "GET api/users":{
+    "description": "serves an array of all users",
+    "queries": [],
+    "example response":{
+      "users":[
+        {
+        "username": "butter_bridge",
+        "name": "jonny",
+        "avatar_url":
+        "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+        }
+      ]
+    }
   }
 }
