@@ -1,14 +1,18 @@
-# Project Name: KN News
-
 ## Live Demo available [here](https://kn-news.onrender.com/api)
 
-##Project Overview
+## Project Overview
+The project is RESTful API backend that allows users to interact with a database of articles, topics, and comments. This API provides endpoints to allow users to interact with the database by performing CRUD operations.
 
-##Setup
+The API is built using javascript, Node.js, Express, and PostgreSQL.
+
+## Setup
 1. Clone repositary: https://github.com/kylenoad/nc_news.git
-2. Run npm i to install the dependencies 
+2. Run npm i to install the dependencies
+3. You will need to create two .env files for your project: .env.test and .env.development. Into each, add PGDATABASE=, with the correct database name for that environment (see /db/setup.sql for the database names)
+4. Seed the database: npm run seed
+5. Check everything is working: npm run test
 
-You will need to create two .env files for your project: .env.test and .env.development. Into each, add PGDATABASE=, with the correct database name for that environment (see /db/setup.sql for the database names)
+## Requirements
 
 ## Available Endpoints
 - `GET /api` - List of available endpoints and expected response
@@ -20,17 +24,3 @@ You will need to create two .env files for your project: .env.test and .env.deve
 - `POST /api/articles/:article_id/comments`
 - `PATCH /api/articles/:article_id`
 - `DELETE /api/comments/:comment_id`
-
-
-  "devDependencies": {
-    "husky": "^8.0.2",
-    "jest": "^27.5.1",
-    "jest-extended": "^2.0.0",
-    "jest-sorted": "^1.0.15",
-    "pg-format": "^1.0.4",
-    "supertest": "^7.0.0"
-  },
-  "dependencies": {
-    "dotenv": "^16.0.0",
-    "express": "^4.21.2",
-    "pg":
