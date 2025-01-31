@@ -7,14 +7,14 @@ The API is built using javascript, Node.js, Express, and PostgreSQL.
 
 ## Setup
 1. Clone repositary: https://github.com/kylenoad/nc_news.git
-2. Run npm i to install the dependencies
+2. Run **npm i** to install the dependencies
 3. You will need to create two .env files for your project: .env.test and .env.development. Into each, add PGDATABASE=, with the correct database name for that environment (see /db/setup.sql for the database names)
-4. Seed the database: npm run seed
-5. Check everything is working: npm run test
+4. Seed the database: **npm run seed**
+5. Check everything is working: **npm run test**
 
 ## Requirements
-- Node.js v23.1.0
-- PostgreSQL v16.6
+- **Node.js** v23.1.0
+- **PostgreSQL** v16.6
 
 ## Available Endpoints
 - `GET /api` - List of available endpoints and expected responses
