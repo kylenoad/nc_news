@@ -13,12 +13,11 @@ The API is built using javascript, Node.js, Express, and PostgreSQL.
 5. Check everything is working: npm run test
 
 ## Requirements
-- Node.js v
-- PostgreSQL v
-
+- Node.js v23.1.0
+- PostgreSQL 16.6
 
 ## Available Endpoints
-- `GET /api` - List of available endpoints and expected response
+- `GET /api` - List of available endpoints and expected responses
 - `GET /api/topics`
 - `GET /api/articles`
 - `GET /api/users`
