@@ -1,7 +1,7 @@
 # Project Name
 KN News
 
-## [Live Demo available here:](https://kn-news.onrender.com/api)
+## Live Demo available [here](https://kn-news.onrender.com/api)
 
 
 
