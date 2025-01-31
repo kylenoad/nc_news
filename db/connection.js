@@ -6,7 +6,7 @@ require('dotenv').config({
 });
 
 if (!process.env.PGDATABASE) {
-  throw new Error('PGDATABASE not set');
+  throw new Error('PGDATABASE or PGDATABASE not set');
 }
 
 const config = {};
