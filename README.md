@@ -1,7 +1,7 @@
 ## Live Demo available [here](https://kn-news.onrender.com/api)
 
 ## Project Overview
-The project is RESTful API backend that allows users to interact with a database of articles, topics, and comments. This API provides endpoints to allow users to interact with the database by performing CRUD operations.
+The project is a RESTful API backend that enables users to interact with a database of articles, topics, and comments. This API provides various endpoints that allow users to perform CRUD (Create, Read, Update, Delete) operations on the data, with additional sorting and filtering functionality.
 
 The API is built using javascript, Node.js, Express, and PostgreSQL.
 
@@ -13,6 +13,9 @@ The API is built using javascript, Node.js, Express, and PostgreSQL.
 5. Check everything is working: npm run test
 
 ## Requirements
+- `Node.js v
+- PostgreSQL v
+
 
 ## Available Endpoints
 - `GET /api` - List of available endpoints and expected response
