@@ -13,7 +13,7 @@ The API is built using javascript, Node.js, Express, and PostgreSQL.
 5. Check everything is working: npm run test
 
 ## Requirements
-- `Node.js v
+- Node.js v
 - PostgreSQL v
 
 
