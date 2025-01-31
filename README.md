@@ -14,7 +14,7 @@ The API is built using javascript, Node.js, Express, and PostgreSQL.
 
 ## Requirements
 - Node.js v23.1.0
-- PostgreSQL 16.6
+- PostgreSQL v16.6
 
 ## Available Endpoints
 - `GET /api` - List of available endpoints and expected responses
