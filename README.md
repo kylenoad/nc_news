@@ -1,5 +1,5 @@
 # Project Name
-## KN News
+KN News
 
 ## [Live Demo available here:](https://kn-news.onrender.com/)
 
