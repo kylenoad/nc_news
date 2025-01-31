@@ -10,17 +10,16 @@
 
 You will need to create two .env files for your project: .env.test and .env.development. Into each, add PGDATABASE=, with the correct database name for that environment (see /db/setup.sql for the database names)
 
-##Available endpoints
-GET /api - list of available end points and expected response 
-GET /api/topics
-GET /api/articles
-GET /api/users
-GET /api/articles/:article_id
-GET /api/articles/:article_id/comments
-POST /api/articles/:article_id/comments
-PATCH /api/articles/:article_id
-DELETE /api/comments/:comment_id
-
+## Available Endpoints
+- `GET /api` - List of available endpoints and expected response
+- `GET /api/topics`
+- `GET /api/articles`
+- `GET /api/users`
+- `GET /api/articles/:article_id`
+- `GET /api/articles/:article_id/comments`
+- `POST /api/articles/:article_id/comments`
+- `PATCH /api/articles/:article_id`
+- `DELETE /api/comments/:comment_id`
 
 
   "devDependencies": {
