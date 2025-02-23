@@ -527,3 +527,36 @@ describe("POST /api/articles", () => {
       });
   });
 });
+
+describe("DELETE /api/articles/:article_id", () => {
+  test("should delete an article and return the deleted article", () => {
+    return request(app)
+      .delete("/api/articles/1")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.deletedArticle).toHaveProperty("article_id", 1);
+        expect(response.body.deletedArticle).toHaveProperty(
+          "title",
+          "Living in the shadow of a great man"
+        );
+      });
+  });
+
+  test("Should return 404 if article ID is valid but does not exist", () => {
+    return request(app)
+      .delete("/api/articles/9999")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Article not found");
+      });
+  });
+
+  test("Should return 400 if the article_id is not valid", () => {
+    return request(app)
+      .delete("/api/articles/one")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+});

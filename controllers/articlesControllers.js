@@ -3,6 +3,7 @@ const {
   fetchArticles,
   updateVotes,
   insertArticle,
+  deleteArticleById,
 } = require("../models/articlesModels");
 
 const getArticleById = (request, response, next) => {
@@ -50,4 +51,29 @@ const postArticle = (request, response, next) => {
     });
 };
 
-module.exports = { getArticleById, getArticles, patchArticleById, postArticle };
+const deleteArticle = (request, response, next) => {
+  const { article_id } = request.params;
+
+  if (isNaN(article_id)) {
+    return response.status(400).send({ msg: "Bad request" });
+  }
+
+  deleteArticleById(article_id)
+    .then((deletedArticle) => {
+      if (!deletedArticle) {
+        return response.status(404).send({ msg: "Article not found" });
+      }
+      response.status(200).send({ deletedArticle });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+module.exports = {
+  getArticleById,
+  getArticles,
+  patchArticleById,
+  postArticle,
+  deleteArticle,
+};
