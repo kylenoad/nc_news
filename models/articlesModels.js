@@ -112,4 +112,24 @@ const updateVotes = (article_id, newVotes) => {
     });
 };
 
-module.exports = { fetcharticlesById, fetchArticles, updateVotes };
+const insertArticle = (title, body, topic, author, article_img_url) => {
+  return db
+    .query(
+      `
+      INSERT INTO articles (title, body, topic, author, article_img_url)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING *;
+      `,
+      [title, body, topic, author, article_img_url]
+    )
+    .then(({ rows }) => {
+      return rows[0];
+    });
+};
+
+module.exports = {
+  fetcharticlesById,
+  fetchArticles,
+  updateVotes,
+  insertArticle,
+};
